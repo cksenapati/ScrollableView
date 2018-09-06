@@ -36,7 +36,7 @@ public class AllDatesAdapter extends ArrayAdapter<MyDate> {
         }
 
 
-        String fullDate =  date.getDate()+ date.getMonth() + date.getYear();
+        String fullDate =  date.getDate()+"/"+ date.getMonth() +"/"+ date.getYear();
         TextView textview = (TextView) convertView.findViewById(R.id.text_view_date_details);
 
         textview.setText(fullDate);

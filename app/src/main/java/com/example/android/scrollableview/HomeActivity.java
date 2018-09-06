@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -14,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,10 +22,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Date;
-
-import static android.R.attr.country;
-import static android.R.attr.name;
 
 public class HomeActivity extends AppCompatActivity {
     public ListView mListView;
@@ -40,7 +36,7 @@ public class HomeActivity extends AppCompatActivity {
         initialization();
 
         String jsonUrl = "http://www.mocky.io/v2/5b90befa2e0000a22ba89f4f";
-        getPinCodeDetailsAsyncTask task = new getPinCodeDetailsAsyncTask();
+        getDatesAsyncTask task = new getDatesAsyncTask();
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonUrl);
 
 
@@ -52,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
         mArrayListDates = new ArrayList<>();
     }
 
-    private class getPinCodeDetailsAsyncTask extends AsyncTask<String,Void,String>
+    private class getDatesAsyncTask extends AsyncTask<String,Void,String>
     {
         @Override
         protected void onPreExecute() {
@@ -61,12 +57,15 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... urls) {
+
+
             if(urls.length <1 || urls[0] == null)
                 return null ;
 
             try {
                 getJsonResponse(urls[0]);
                 return "success";
+
             }
             catch (Exception ex)
             {
@@ -77,8 +76,10 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String string)
         {
-            if(string == null)
+            if(string == null) {
+                Toast.makeText(HomeActivity.this,"No Record Found",Toast.LENGTH_SHORT).show();
                 return;
+            }
             else
                 displayAllDates();
         }
